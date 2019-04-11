@@ -143,6 +143,9 @@ void do_tcp_client(void)
 //						BD_TG_ping_time = 0;
 //					}
 				break;
+				case MQTT_PKT_DISCONNECT:
+						network_status = 1;
+					break;
 			}	
 			
 					

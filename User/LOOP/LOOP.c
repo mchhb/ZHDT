@@ -178,9 +178,9 @@ void application(void)
 			{
 				USART_SendDatacmd(USART1,result[k]);
 			}
+			external_driver = 1;
 			if(rxd_buffer_locked1 == 1)
 			{
-				external_driver = 1;
 				rxd_buffer_locked1 = 0;
 				external_temp1 = usart_buf1[14];
 				external_humi1 = usart_buf1[15];
@@ -199,9 +199,9 @@ void application(void)
 			{
 				USART_SendDatacmd(USART3,result[m]);
 			}
+			external_driver = 0;
 			if(rxd_buffer_locked3 == 1)
 			{
-				external_driver = 0;
 				rxd_buffer_locked3 = 0;
 				external_temp3 = usart_buf3[14];
 				external_humi3 = usart_buf3[15];
@@ -232,6 +232,7 @@ void application(void)
 		{
 			overtime++;
 			overtime_reset++;
+			MQTT_STATE = MQTT_PKT_DISCONNECT;
 			printf("未收到心跳次数： %d\r\n",overtime);
 			if(overtime>5)
 			{
