@@ -38,7 +38,6 @@ void USART2_Config(void)
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;//接收与发送都使能
 	
 	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE); //Enable rx enable, 
-	
 	USART_Init(USART2, &USART_InitStructure);  //初始化USART2
 	USART_Cmd(USART2, ENABLE);// USART2使能
   /* CPU的小缺陷：串口配置好，如果直接Send，则第1个字节发送不出去
@@ -111,7 +110,28 @@ void USART2_NVIC_Configuration(void)
 void USART2_IRQHandler(void)                	
 {
 	unsigned char c1 = 0;
-	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	unsigned char ushTemp = 0;
+	if(USART_GetFlagStatus(USART2, USART_FLAG_ORE) != RESET)
+	{
+		USART_ReceiveData(USART2); 
+		USART_ClearFlag(USART2, USART_FLAG_ORE);		
+	}
+	if(USART_GetFlagStatus(USART2, USART_FLAG_NE) != RESET)
+	{
+		USART_ReceiveData(USART2); 
+		USART_ClearFlag(USART2, USART_FLAG_NE);		
+	}
+	if(USART_GetFlagStatus(USART2, USART_FLAG_FE) != RESET)
+	{
+		USART_ReceiveData(USART2); 
+		USART_ClearFlag(USART2, USART_FLAG_FE);		
+	}
+	if(USART_GetFlagStatus(USART2, USART_FLAG_PE) != RESET)
+	{
+		USART_ReceiveData(USART2); 
+		USART_ClearFlag(USART2, USART_FLAG_PE);		
+	}
+  if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
 		 RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE);		/*先关闭等待使用*/ 	
 		// printf(" 进入中断 ！\r\n");
@@ -119,6 +139,7 @@ void USART2_IRQHandler(void)
 		 NETWORK_LED_FAIL_OFF; NETWORK_LED_SUCCESS_ON; 
 	   work_uart_status = 1;
 		 c1 = USART_ReceiveData(USART2);
+		 
 		 if(rxd_buffer_locked)
 		 {
 			 return;

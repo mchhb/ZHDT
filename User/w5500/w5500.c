@@ -6,6 +6,7 @@
 #include "socket.h"
 #include "delay.h"
 #include "gpio.h"
+#include "iwdg.h"
 
 static uint8 I_STATUS[MAX_SOCK_NUM];
 static uint16 SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
@@ -506,6 +507,7 @@ void w5500_check(void)
 			close(cot++);
 		}
 		while(PHY_connect == 0) { 
+			IWDG_Feed();
 			PHY_connect=0x01&getPHYStatus();	
 			printf(" .");
 		  NETWORK_LED_SUCCESS_OFF; 

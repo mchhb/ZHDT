@@ -37,3 +37,5 @@
 ..\output\w5500.o: ..\User\socket\socket.h
 ..\output\w5500.o: ..\User\delay\delay.h
 ..\output\w5500.o: ..\User\gpio\gpio.h
+..\output\w5500.o: ..\User\IWDG\iwdg.h
+..\output\w5500.o: ..\User\main\main.h

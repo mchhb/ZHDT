@@ -101,6 +101,10 @@ uint8_t domain_name[]="www.embed-net.com";
 
 void Initialization_configuration(void) {
 
+	delay_ms(1000);
+	
+	IWDG_Init(4,3750);//((prer)*rlr)/40;  6s
+	
 	TIM2_Configuration();
 
 	TIM2_NVIC_Configuration();
@@ -114,14 +118,6 @@ void Initialization_configuration(void) {
 	GPIO_Configuration();
 
 	WIZ_SPI_Init();
-
-	USART2_Config();		
-
-	USART1_Config();	
-	
-	USART3_Config();	
-
-	GetLockCode();
 	
 	at24c16_init();
 
@@ -130,6 +126,14 @@ void Initialization_configuration(void) {
 	ADC1_Init();
 	
 	EXTI_ENABLE();
+	
+	USART2_Config();		
+
+	USART1_Config();	
+	
+	USART3_Config();	
+
+	GetLockCode();
 	
 	Reset_W5500();
 
@@ -141,14 +145,14 @@ void Initialization_configuration(void) {
 
 	sysinit(txsize, rxsize); 													// 初始化8个socket
 
-	//IWDG_Init(4,3000);//((prer)*rlr)/40;
-
   printf("W5500 Init Complete!\r\n");
 	
 	START_TIME2;
 }
 void application(void)
 {
+	//printf("1");
+	IWDG_Feed();
 	w5500_check();
 	auto_dhcp();
 	delay_ms(100);
@@ -222,7 +226,9 @@ void application(void)
 		delay_ms(100);
 		if(buff[0]==0xd0)
 		{		 	 	
+			MQTT_STATE = MQTT_PKT_PINGREQ;
 			overtime = 0;
+			overtime_reset = 0;
 			memset(buff,0,sizeof(buff));
 			flag =1;	
 			printf("收到心跳\r\n");
@@ -234,7 +240,7 @@ void application(void)
 			overtime_reset++;
 			MQTT_STATE = MQTT_PKT_DISCONNECT;
 			printf("未收到心跳次数： %d\r\n",overtime);
-			if(overtime>5)
+			if(overtime>2)
 			{
 				printf("心跳超时，重新连接！\r\n");
 				overtime=0;
@@ -374,7 +380,7 @@ void application(void)
 			work_Acceleration_status = 0;
 		}
 	}	
-	if(overtime_reset > 10)
+	if(overtime_reset > 5)
 	{
 		SoftReset();		
 	}
