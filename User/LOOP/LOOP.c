@@ -109,12 +109,6 @@ void Initialization_configuration(void) {
 
 	TIM2_NVIC_Configuration();
 	
-	USART2_NVIC_Configuration();
-	
-	USART1_NVIC_Configuration();
-	
-	USART3_NVIC_Configuration();
-
 	GPIO_Configuration();
 
 	WIZ_SPI_Init();
@@ -146,6 +140,12 @@ void Initialization_configuration(void) {
 	sysinit(txsize, rxsize); 													// ³õÊ¼»¯8¸ösocket
 
   printf("W5500 Init Complete!\r\n");
+	
+	USART1_NVIC_Configuration();
+	
+	USART3_NVIC_Configuration();
+	
+	USART2_NVIC_Configuration();
 	
 	START_TIME2;
 }

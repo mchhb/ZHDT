@@ -113,22 +113,22 @@ void USART2_IRQHandler(void)
 	unsigned char ushTemp = 0;
 	if(USART_GetFlagStatus(USART2, USART_FLAG_ORE) != RESET)
 	{
-		USART_ReceiveData(USART2); 
+		ushTemp=USART_ReceiveData(USART2); 
 		USART_ClearFlag(USART2, USART_FLAG_ORE);		
 	}
 	if(USART_GetFlagStatus(USART2, USART_FLAG_NE) != RESET)
 	{
-		USART_ReceiveData(USART2); 
+		ushTemp=USART_ReceiveData(USART2); 
 		USART_ClearFlag(USART2, USART_FLAG_NE);		
 	}
 	if(USART_GetFlagStatus(USART2, USART_FLAG_FE) != RESET)
 	{
-		USART_ReceiveData(USART2); 
+		ushTemp=USART_ReceiveData(USART2); 
 		USART_ClearFlag(USART2, USART_FLAG_FE);		
 	}
 	if(USART_GetFlagStatus(USART2, USART_FLAG_PE) != RESET)
 	{
-		USART_ReceiveData(USART2); 
+		ushTemp=USART_ReceiveData(USART2); 
 		USART_ClearFlag(USART2, USART_FLAG_PE);		
 	}
   if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
