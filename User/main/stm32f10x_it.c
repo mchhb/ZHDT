@@ -43,6 +43,8 @@ int buflen = sizeof(buf);
 int i,j;
 int ac;
 int battery;
+int tim3i=0;
+volatile unsigned int tim3fquence=0;
 /** @addtogroup Template_Project
   * @{
   */
@@ -141,6 +143,24 @@ void TIM2_IRQHandler(void)
 		}
 		
 	}		 	
+}
+void TIM3_IRQHandler(void)
+{
+	 if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+	  {
+			TIM_ClearITPendingBit(TIM3, TIM_FLAG_Update);
+			tim3i++;
+//			tim3fquence=0; 
+			if(tim3i>=50000)  //
+			{
+				tim3fquence++;
+				tim3i=0;	
+			}
+			if(tim3fquence > 2)
+			{
+				SoftReset();
+			}
+	  }
 }
 uint8_t acc_on = 0;
 void EXTI0_IRQHandler(void)

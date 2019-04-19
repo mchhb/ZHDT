@@ -9,6 +9,7 @@ volatile unsigned char usart_flg=0;
 volatile unsigned char ptr_rxd_buffer=0;
 unsigned char  start=0;
 unsigned char  crc=0;
+uint8_t tim3_reset = 0;
 
 void USART2_Config(void)
 {
@@ -133,11 +134,7 @@ void USART2_IRQHandler(void)
 	}
   if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
-		 RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE);		/*先关闭等待使用*/ 	
 		// printf(" 进入中断 ！\r\n");
-		 WORK_LED_ERROR_OFF;	WORK_LED_NORMAL_ON;
-		 NETWORK_LED_FAIL_OFF; NETWORK_LED_SUCCESS_ON; 
-	   work_uart_status = 1;
 		 c1 = USART_ReceiveData(USART2);
 		 
 		 if(rxd_buffer_locked)
@@ -145,7 +142,7 @@ void USART2_IRQHandler(void)
 			 return;
 		 }
 		 if((ptr_rxd_buffer == 0) &&(start == 0)&& (c1 == 0x24))  //receive 1byte
-		 {
+		 { 	
 			 	 usart_buf[ptr_rxd_buffer++] = c1; 
          start = 1;
 				 return;
@@ -163,7 +160,16 @@ void USART2_IRQHandler(void)
 			 crc = usart_buf[0]+usart_buf[1]+usart_buf[2]+usart_buf[3]+usart_buf[4]+usart_buf[5]+usart_buf[6]+usart_buf[7]+usart_buf[8];
        if(crc == usart_buf[9])
        {
+				  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE);		/*先关闭等待使用*/
+				 if(tim3_reset == 0)
+				 {
+					 tim3_reset++;
+					 START_TIME3;				 
+				 }
+				  WORK_LED_ERROR_OFF;	WORK_LED_NORMAL_ON;
+					NETWORK_LED_FAIL_OFF; NETWORK_LED_SUCCESS_ON; 
 	        rxd_buffer_locked = 1;          // lock the rxd buffer
+				  work_uart_status = 1;
 			    crc = 0;
 				  usart_flg = 1;
 				  ptr_rxd_buffer = 0;
@@ -172,8 +178,8 @@ void USART2_IRQHandler(void)
        start = 0;
        crc = 0;
       }
-	}
-	USART_ClearFlag(USART2,USART_IT_RXNE);			 
+		 USART_ClearFlag(USART2,USART_IT_RXNE);	
+		}		 
 }
 
 void USART_SendData_CBuilder(USART_TypeDef* USARTx,unsigned char ch)

@@ -30,6 +30,8 @@ extern uint8 BD_TG_ping_pak[2];
 unsigned char RxBuffer2[200];
 extern uint8 buff[2048];	
 extern unsigned char w5500_buf[128];   //之前是128
+extern volatile unsigned int  tim3fquence;	//定时中断次数
+extern int tim3i;
 unsigned char result[20] = {0x66,0x04,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 														0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x99};
 void GetLockCode(void);
@@ -108,6 +110,10 @@ void Initialization_configuration(void) {
 	TIM2_Configuration();
 
 	TIM2_NVIC_Configuration();
+	
+	TIM3_Configuration();
+
+	TIM3_NVIC_Configuration();
 	
 	GPIO_Configuration();
 
@@ -386,6 +392,8 @@ void application(void)
 	}
 	if(rxd_buffer_locked == 1)
 	{
+		tim3i = 0;
+		tim3fquence=0;
 		rxd_buffer_locked = 0;
 		if(usart_buf[1] == 0x01)
 		{

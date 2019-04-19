@@ -46,8 +46,13 @@ extern uint32_t t2_count_ms[];
 #define START_TIME2  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);TIM_Cmd(TIM2, ENABLE)
 #define STOP_TIME2   TIM_Cmd(TIM2, DISABLE);RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE)
 
+#define START_TIME3  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 , ENABLE);TIM_Cmd(TIM3, ENABLE)
+#define STOP_TIME3   TIM_Cmd(TIM3, DISABLE);RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 , DISABLE)
 
 void TIM2_NVIC_Configuration(void);
 void TIM2_Configuration(void);
+
+void TIM3_NVIC_Configuration(void);
+void TIM3_Configuration(void);
 
 #endif
