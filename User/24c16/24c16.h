@@ -4,8 +4,8 @@
 #include "stm32f10x.h"
 #include "types.h"
 
-#define I2C_SCK	        GPIO_Pin_9  //out
-#define I2C_SDA	        GPIO_Pin_8
+#define I2C_SCK	        GPIO_Pin_6  //out
+#define I2C_SDA	        GPIO_Pin_7
 //------------------------------------Ä¿±êIP
 #define EE_ADDR_IP_ONE						0x00
 #define EE_ADDR_IP_TWO						0x02
@@ -48,7 +48,17 @@
 #define EE_ADDR_W5500_CONFIG_MAC					0x102
 #define EE_ADDR_W5500_CONFIG_PORT					0x104
 #define EE_ADDR_W5500_CONFIG_IP						0x106
+#define EE_ADDR_REBOOT										0x110
+#define EE_ADDR_DOOR_CLOSE_TIMES					0x112
+#define EE_ADDR_DOOR_CLOSE_TIMES_SUM			0x114
+#define EE_ADDR_DOOR_CLOSE_TIMES_SUM1			0x116
+#define EE_ADDR_DOOR_CLOSE_TIMES_SUM2			0x118
 
+#define EE_ADDR_MQTT_SEND_TIME						0x200
+#define EE_ADDR_ID_NAME1 									0x205
+#define EE_ADDR_ID_NAME2									0x207
+#define EE_ADDR_ID_NAME3 									0x209
+#define EE_ADDR_ID_NAME4 									0x211
 #define EE_ADDR_W5500_PC_CONFIG_SUCCESS     0x01
 #define EE_ADDR_W5500_RAM_CONFIG_SUCCESS			0x02
 

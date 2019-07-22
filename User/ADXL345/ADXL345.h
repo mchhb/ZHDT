@@ -27,9 +27,9 @@
 #define ADXL345_SPI_MOSI_SOURCE           GPIO_PinSource7
 #define ADXL345_SPI_MOSI_AF               GPIO_AF_5
 
-#define ADXL345_SPI_CS_PIN                GPIO_Pin_1                 
-#define ADXL345_SPI_CS_GPIO_PORT          GPIOB                      
-#define ADXL345_SPI_CS_GPIO_CLK           RCC_APB2Periph_GPIOB
+#define ADXL345_SPI_CS_PIN                GPIO_Pin_4                 
+#define ADXL345_SPI_CS_GPIO_PORT          GPIOC                      
+#define ADXL345_SPI_CS_GPIO_CLK           RCC_APB2Periph_GPIOC
 
 
 

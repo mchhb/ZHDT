@@ -26,9 +26,9 @@ uint8 DHT11_GetValue(uint8 *p)
 { 
     uint8 temp,temp1,temp2;
     //总线空闲状态为高电平,主机把总线拉低等待DHT11响应,主机把总线拉低必须大于18毫秒,保证DHT11能检测到起始信号。
-    GPIO_ResetBits(GPIOB,DHT11_DATA);
+    GPIO_ResetBits(GPIOC,DHT11_DATA);
     delay_ms(20);//精确延时20ms
-    GPIO_SetBits(GPIOB,DHT11_DATA);
+    GPIO_SetBits(GPIOC,DHT11_DATA);
     //主机发送开始信号结束后,延时等待20-40us后, 读取DHT11的响应信号。
     delay_us(40);//精确延时40us
     //总线为低电平,说明DHT11发送响应信号
@@ -43,7 +43,7 @@ uint8 DHT11_GetValue(uint8 *p)
       p[1]=DHT11_ReadData();//8bit温度整数数据
       temp2=DHT11_ReadData();//忽略无效数据
       temp=DHT11_ReadData();//8bit校验和
-      GPIO_SetBits(GPIOB,DHT11_DATA);     
+      GPIO_SetBits(GPIOC,DHT11_DATA);     
       if(temp==(p[0]+p[1]+temp1+temp2))	
       {
 					return 1;

@@ -24,26 +24,45 @@
 #include "delay.h"
 #include "LOOP.h"
 #include "24c16.h"
+#include "input.h"
 uint8 buff[2048];				                             /*定义一个2KB的缓存*/
 uint8  BD_TG_server_ip[4] = {172,16,40,176};//{202,106,5,12};        //BD_TG服务器IP地址
 uint16 BD_TG_server_port  = 1883;                   //BD_TG服务器端口号
 
 
 int MQTT_STATE = MQTT_PKT_CONNECT;   //连接
-const char *topics[] = {"test"}; //原来的主题名称stateUp
+const char *topics[] = {"sensor-data","/alarm"}; //原来的主题名称stateUp
+const char *topics1[] = {"subscibe"}; 
 uint8 BD_TG_ping_pak[2] = {0xC0,0x00};
 
 unsigned char HexToChar(unsigned char bChar);
 unsigned char 	GetASCII(unsigned char  x);
-uint16 hex1adecimal_to_decimal(uint16 hex);
+uint16 hex1adecimal_to_decimal(u32 hex);
 unsigned char *data_ptr = NULL;
 extern unsigned char flag;
 extern unsigned char TxBuffer2[200]; 
 extern unsigned char RxBuffer2[200];
 extern unsigned char TxCounter2;
 extern unsigned char RxCounter2;
+extern uint8_t w5500_connect_success;
+extern uint8_t W5500_REBOOT;
+extern uint8_t input5_printf;
+extern uint8_t input6_printf;
+extern int floor;
+extern u32 id_name_all;
+u32 door_close_times_mqtt = 0;
+extern uint8_t door_open_over_time_sum;
+extern uint8_t door_close_times;
+extern uint8_t door_close_times_sum;
+extern uint8_t door_close_times_sum1;
+extern uint8_t door_close_times_sum2;
+extern uint8_t door_not_close;
 unsigned char ASII_hex=0;
+extern uint8_t door_open_times;
 char test[300];
+extern uint8_t   pingceng;
+extern uint8_t   power;
+uint8_t tpye = 1;
 /**
 *@brief		TCP Client回环演示函数。
 *@param		无
@@ -69,7 +88,8 @@ void do_tcp_client(void)
 			connect(SOCK_TCPC,BD_TG_server_ip,BD_TG_server_port);                /*socket连接服务器*/ 
 		break;
 
-		case SOCK_ESTABLISHED: /*socket处于连接建立状态*/			
+		case SOCK_ESTABLISHED: /*socket处于连接建立状态*/		
+			w5500_connect_success = 1;			
 			if(getSn_IR(SOCK_TCPC) & Sn_IR_CON)
 			{
 				setSn_IR(SOCK_TCPC, Sn_IR_CON); 							         /*清除接收中断标志位*/
@@ -88,12 +108,12 @@ void do_tcp_client(void)
 				/*MQTT协议连接BD_TG代理平台*/
 				case MQTT_PKT_CONNECT:
 					BD_TG_DevLink();
-					MQTT_STATE = MQTT_PKT_PINGREQ;
+					MQTT_STATE = MQTT_PKT_SUBSCRIBE;
 			   	
 				break;
 				/*订阅主题*/
 				case MQTT_PKT_SUBSCRIBE:
-					BD_TG_Subscribe(topics,1);
+					BD_TG_Subscribe(topics1,1);
 					MQTT_STATE = MQTT_PKT_PINGREQ;
 				break;	
 				/*Qos2级别发布消息*/
@@ -102,18 +122,28 @@ void do_tcp_client(void)
 				  memset(test, 0, sizeof(test));
 				  
 #ifdef MQTT_STRING
-				  sprintf(test, "temp = %f,humi = %f,noise = %d,AccelerationX = %f,AccelerationY = %f,    \
-				AccelerationZ = %f,temp1 = %d,humi1 = %d,vibr1 = %d,noise1 = %d,temp3 = %d,humi3 = %d,\
-				external_vibr3 = %d,noise3 = %d", \
-				temperature,humidity,noise,AccelerationX,AccelerationY,AccelerationZ,  \
-				external_temp1,external_humi1,external_vibr1,external_noise1,external_temp3,external_humi3,external_vibr3,external_noise3);
+				if(W5500_REBOOT == 1)
+				{
+						sprintf(test,"REBOOT is success");
+						W5500_REBOOT = 0;
+				}
+				else if(door_open_times == 1)
+				{
+					sprintf(test,"The door opens over time : %d",++door_open_over_time_sum);
+						door_open_times = 0;
+				}
+				else
+				{
+					door_close_times_mqtt = door_close_times+(door_close_times_sum*255)+(door_close_times_sum1*255*255)+(door_close_times_sum2*255*255*255);
+				 sprintf(test,"{\"id\":%d,\"type\":%d,\"s1\":%d,\"s2\":%d,\"s3\":%d,\"s4\":%d,\"s5\":%d,\"s6\":%d,\"floor\":%d,\"t\":%d,\"h\":%d,\"vx\":%d,\"vy\":%d,\"vz\":%d,\"acdt\":%d}",id_name_all,tpye,door_not_close,input4_value,pingceng,input5_printf,input6_printf,power,floor,(int)temperature,(int)humidity,(int)AccelerationX,(int)AccelerationY,(int)AccelerationZ,door_close_times_mqtt);
+				}
 #else
 				  for(int i=0; i<200;i++)
 					{
 						test[i] = i+0x30;
 					}
 #endif
-					BD_TG_Publish(*topics,test,sizeof(test)); //发布消息
+					BD_TG_Publish(*topics,test,strlen(test)); //发布消息
                 
 					delay_ms(300);                                 //等待平台响应    
 					/*接收平台发送的PubRec并回复PubRel响应*/		 
@@ -136,7 +166,7 @@ void do_tcp_client(void)
 					MQTT_STATE = MQTT_PKT_PINGREQ;
 				break;
 				case MQTT_PKT_PINGREQ:
-					network_status = 0;
+				//	network_status = 0;
 //					if(BD_TG_ping_time > 50)
 //					{
 //						send(SOCK_TCPC,BD_TG_ping_pak,2);
@@ -191,18 +221,26 @@ unsigned char 	GetASCII(unsigned char  x)
 	}
 	return ('0'+x);  
 }	
-uint16 hex1adecimal_to_decimal(uint16 hex)
+uint16 hex1adecimal_to_decimal(u32 hex)
 {
  uint16 ret; //
- unsigned char ret4,ret3,ret2,ret1; //局部变量
- ret4=hex/0x1000; //取高位
+ unsigned char ret8,ret7,ret6,ret5,ret4,ret3,ret2,ret1; //局部变量
+ ret8=hex/0x10000000; //取高位
  hex=hex<<4; //ret
- ret3=hex/0x1000; //
+ ret7=hex/0x10000000; //
  hex=hex<<4; 
- ret2=hex/0x1000; //
+ ret6=hex/0x10000000; //
  hex=hex<<4; 
- ret1=hex/0x1000; // 
- ret=ret1+ret2*16+ret3*16*16+ret4*16*16*16;//十进制
+ ret5=hex/0x10000000; // 
+ hex=hex<<4;
+ ret4=hex/0x10000000; //取高位
+ hex=hex<<4; //ret
+ ret3=hex/0x10000000; //
+ hex=hex<<4; 
+ ret2=hex/0x10000000; //
+ hex=hex<<4; 
+ ret1=hex/0x10000000; // 
+ ret=ret1+ret2*10+ret3*100+ret4*1000+ret5*10000+ret6*100000+ret7*1000000+ret8*10000000;//十进制
  return(ret);
 }
 

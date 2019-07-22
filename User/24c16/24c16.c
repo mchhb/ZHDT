@@ -6,12 +6,6 @@
 void at24c16_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
-	//使用AT24C16 每页16字节，总共128页
-	//采用开漏输出，外接2个10K电阻       			GPIO_Mode_Out_OD
-	//推挽输出，会产生大电流，容易烧坏器件   	GPIO_Mode_Out_PP
-	//可随便变更IIC引脚，为软件IIC
-	//   I2C_SDA     PB8      
-	//   I2C_SCK     PB9 
 
   GPIO_InitStructure.GPIO_Pin = I2C_SDA;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

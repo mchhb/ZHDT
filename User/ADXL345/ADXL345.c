@@ -6,7 +6,7 @@ void SPI_init(void)
   GPIO_InitTypeDef GPIO_InitStructure;
   SPI_InitTypeDef    SPI_InitStructure;  
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOA |
-                         RCC_APB2Periph_GPIOB, ENABLE);
+                         RCC_APB2Periph_GPIOB| RCC_APB2Periph_GPIOC, ENABLE);
     
  
  
@@ -92,6 +92,7 @@ void ADXL345_write_byte(uint8_t add,uint8_t val)
 {
      GPIO_ResetBits(ADXL345_SPI_CS_GPIO_PORT ,ADXL345_SPI_CS_PIN);
 
+	
      SPI_I2S_SendData(ADXL345_SPI,add<<8|val);
  
     while(SPI_I2S_GetFlagStatus(ADXL345_SPI,SPI_I2S_FLAG_TXE)==RESET);
@@ -116,6 +117,7 @@ void ADXL345_ReadXYZ(float *g)
     BUF[4] = ADXL345_read_byte(0x36);  
     BUF[5] = ADXL345_read_byte(0x37);   
     delay_ms(1);
+	
    
     temp = (BUF[1] << 8) + BUF[0];
     if(temp < 0)

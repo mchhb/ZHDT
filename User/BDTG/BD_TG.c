@@ -11,18 +11,22 @@
 #include <string.h>
 #include <stdio.h>
 
+#define PROID		"admin"							// 设备全称//之前用户名是：96ppxbd/s001
 
-#define PROID		"utfuett/device_001"							// 设备全称//之前用户名是：96ppxbd/s001
-
-#define AUTH_INFO	"j9NiGuEaIuKPVexp/MUwWAlZLDox1YQ5+eqX6DuuP/k="	// API密钥  //之前密码是c8opPYlA7ejO7RxAmMjynNBBf015UaGf04UxAIowQIU=
-
-#define DEVID		"DeviceClient005"																								// 荣耀天地设备ID 002号
+#define AUTH_INFO	"password"	// API密钥  //之前密码是c8opPYlA7ejO7RxAmMjynNBBf015UaGf04UxAIowQIU=
+char DEVID_TEST[2];
+extern u32 Lock_Code;
+//#define DEVID		"DeviceClient005"					
+// 荣耀天地设备ID 002号
+//char *DEVID;
 //uint8 Disconnect_Request[2] = {0xe0,0x00};
 unsigned char w5500_buf[128];   //之前是128
 unsigned char publish_buf[64]; 
 extern unsigned char Restore_factory[10];
 extern unsigned char  flag;
 extern unsigned char  BD_TGflag;
+uint16_t DEVID_TEST_U16 = 0x1234;
+uint32_t DEVID1 = 0;
 //==========================================================
 //	函数名称：	BD_TG_DevLink
 
@@ -44,12 +48,12 @@ void BD_TG_DevLink(void)
 
 	unsigned char *dataPtr;
 //	unsigned char mqtt=0;
-
-	printf( "百度天工_DevLink\r\nPROID: %s,	AUIF: %s,	DEVID:%s\r\n",PROID, AUTH_INFO, DEVID);
+//   DEVID1=hex1adecimal_to_decimal(Lock_Code);
+	sprintf(DEVID_TEST,"%d",Lock_Code);
+	printf( "百度天工_DevLink\r\nPROID: %s,	AUIF: %s,	DEVID:%s\r\n",PROID, AUTH_INFO, DEVID_TEST);
 	
-	if(MQTT_PacketConnect(PROID, AUTH_INFO, DEVID, 60, 0, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
+	if(MQTT_PacketConnect(PROID, AUTH_INFO, DEVID_TEST, 60, 0, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{
-			
 		
 		send(SOCK_TCPC,mqttPacket._data,mqttPacket._len);	
 		delay_ms(2000);  //等待平台响应

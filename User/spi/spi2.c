@@ -42,9 +42,9 @@ void WIZ_SPI_Init(void)
 
 void Reset_W5500(void)
 {
-  GPIO_ResetBits(GPIOA, WIZ_RESET);
+  GPIO_ResetBits(GPIOC, WIZ_RESET);
   delay_us(2);  
-  GPIO_SetBits(GPIOA, WIZ_RESET);
+  GPIO_SetBits(GPIOC, WIZ_RESET);
   delay_ms(1600);
 }
 
