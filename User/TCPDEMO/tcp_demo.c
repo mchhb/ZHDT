@@ -24,45 +24,32 @@
 #include "delay.h"
 #include "LOOP.h"
 #include "24c16.h"
-#include "input.h"
 uint8 buff[2048];				                             /*定义一个2KB的缓存*/
 uint8  BD_TG_server_ip[4] = {172,16,40,176};//{202,106,5,12};        //BD_TG服务器IP地址
 uint16 BD_TG_server_port  = 1883;                   //BD_TG服务器端口号
 
-
+extern u32 id_name_all;
 int MQTT_STATE = MQTT_PKT_CONNECT;   //连接
-const char *topics[] = {"sensor-data","/alarm"}; //原来的主题名称stateUp
-const char *topics1[] = {"subscibe"}; 
+const char *topics[] = {"sensor-data"}; //原来的主题名称stateUp
+const char *topics1[] = {"/v2/conf"}; //原来的主题名称stateUp
 uint8 BD_TG_ping_pak[2] = {0xC0,0x00};
 
 unsigned char HexToChar(unsigned char bChar);
 unsigned char 	GetASCII(unsigned char  x);
-uint16 hex1adecimal_to_decimal(u32 hex);
+uint16 hex1adecimal_to_decimal(uint16 hex);
 unsigned char *data_ptr = NULL;
 extern unsigned char flag;
+extern uint8_t status_code1;
+extern uint8_t status_code2;
+extern uint8_t status_code3;
 extern unsigned char TxBuffer2[200]; 
 extern unsigned char RxBuffer2[200];
 extern unsigned char TxCounter2;
 extern unsigned char RxCounter2;
 extern uint8_t w5500_connect_success;
 extern uint8_t W5500_REBOOT;
-extern uint8_t input5_printf;
-extern uint8_t input6_printf;
-extern int floor;
-extern u32 id_name_all;
-u32 door_close_times_mqtt = 0;
-extern uint8_t door_open_over_time_sum;
-extern uint8_t door_close_times;
-extern uint8_t door_close_times_sum;
-extern uint8_t door_close_times_sum1;
-extern uint8_t door_close_times_sum2;
-extern uint8_t door_not_close;
 unsigned char ASII_hex=0;
-extern uint8_t door_open_times;
 char test[300];
-extern uint8_t   pingceng;
-extern uint8_t   power;
-uint8_t tpye = 1;
 /**
 *@brief		TCP Client回环演示函数。
 *@param		无
@@ -88,8 +75,8 @@ void do_tcp_client(void)
 			connect(SOCK_TCPC,BD_TG_server_ip,BD_TG_server_port);                /*socket连接服务器*/ 
 		break;
 
-		case SOCK_ESTABLISHED: /*socket处于连接建立状态*/		
-			w5500_connect_success = 1;			
+		case SOCK_ESTABLISHED: /*socket处于连接建立状态*/	
+			w5500_connect_success = 1;
 			if(getSn_IR(SOCK_TCPC) & Sn_IR_CON)
 			{
 				setSn_IR(SOCK_TCPC, Sn_IR_CON); 							         /*清除接收中断标志位*/
@@ -127,15 +114,12 @@ void do_tcp_client(void)
 						sprintf(test,"REBOOT is success");
 						W5500_REBOOT = 0;
 				}
-				else if(door_open_times == 1)
-				{
-					sprintf(test,"The door opens over time : %d",++door_open_over_time_sum);
-						door_open_times = 0;
-				}
 				else
 				{
-					door_close_times_mqtt = door_close_times+(door_close_times_sum*255)+(door_close_times_sum1*255*255)+(door_close_times_sum2*255*255*255);
-				 sprintf(test,"{\"id\":%d,\"type\":%d,\"s1\":%d,\"s2\":%d,\"s3\":%d,\"s4\":%d,\"s5\":%d,\"s6\":%d,\"floor\":%d,\"t\":%d,\"h\":%d,\"vx\":%d,\"vy\":%d,\"vz\":%d,\"acdt\":%d}",id_name_all,tpye,door_not_close,input4_value,pingceng,input5_printf,input6_printf,power,floor,(int)temperature,(int)humidity,(int)AccelerationX,(int)AccelerationY,(int)AccelerationZ,door_close_times_mqtt);
+					sprintf(test, "{\"id\":%d,\"type\":0,\"s1\":%d,\"t1\":%d,\"h1\":%d,\"n1\":%d,\"vx1\":%d,\"vy1\":%d,\"vz1\":%d,\"s2\":%d,\"t2\":%d,\"h2\":%d,\"n2\":%d,\"vx2\":%d,\"vy2\":%d,\"vz2\":%d,\"s3\":%d,\"t3\":%d,\"h3\":%d,\"n3\":%d,\"vx3\":%d,\"vy3\":%d,\"vz3\":%d}",  	\
+			  	id_name_all,status_code1,(int)temperature,(int)humidity,noise,(int)AccelerationX,(int)AccelerationY,(int)AccelerationZ,  \
+				  status_code2,external_temp1,external_humi1,external_noise1,external_vibx1,external_viby1,external_vibz1,   \
+					status_code3,external_temp3,external_humi3,external_noise3,external_vibx3,external_viby3,external_vibz3);
 				}
 #else
 				  for(int i=0; i<200;i++)
@@ -166,7 +150,7 @@ void do_tcp_client(void)
 					MQTT_STATE = MQTT_PKT_PINGREQ;
 				break;
 				case MQTT_PKT_PINGREQ:
-				//	network_status = 0;
+//					network_status = 0;
 //					if(BD_TG_ping_time > 50)
 //					{
 //						send(SOCK_TCPC,BD_TG_ping_pak,2);
@@ -221,26 +205,18 @@ unsigned char 	GetASCII(unsigned char  x)
 	}
 	return ('0'+x);  
 }	
-uint16 hex1adecimal_to_decimal(u32 hex)
+uint16 hex1adecimal_to_decimal(uint16 hex)
 {
  uint16 ret; //
- unsigned char ret8,ret7,ret6,ret5,ret4,ret3,ret2,ret1; //局部变量
- ret8=hex/0x10000000; //取高位
+ unsigned char ret4,ret3,ret2,ret1; //局部变量
+ ret4=hex/0x1000; //取高位
  hex=hex<<4; //ret
- ret7=hex/0x10000000; //
+ ret3=hex/0x1000; //
  hex=hex<<4; 
- ret6=hex/0x10000000; //
+ ret2=hex/0x1000; //
  hex=hex<<4; 
- ret5=hex/0x10000000; // 
- hex=hex<<4;
- ret4=hex/0x10000000; //取高位
- hex=hex<<4; //ret
- ret3=hex/0x10000000; //
- hex=hex<<4; 
- ret2=hex/0x10000000; //
- hex=hex<<4; 
- ret1=hex/0x10000000; // 
- ret=ret1+ret2*10+ret3*100+ret4*1000+ret5*10000+ret6*100000+ret7*1000000+ret8*10000000;//十进制
+ ret1=hex/0x1000; // 
+ ret=ret1+ret2*16+ret3*16*16+ret4*16*16*16;//十进制
  return(ret);
 }
 

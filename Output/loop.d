@@ -45,11 +45,13 @@
 ..\output\loop.o: ..\User\IWDG\iwdg.h
 ..\output\loop.o: ..\User\main\main.h
 ..\output\loop.o: ..\User\dhcp\dhcp.h
+..\output\loop.o: ..\User\usart1\usart1.h
+..\output\loop.o: ..\User\usart3\usart3.h
 ..\output\loop.o: ..\User\ADXL345\ADXL345.h
 ..\output\loop.o: ..\User\24c16\24c16.h
+..\output\loop.o: ..\User\adc\adc.h
 ..\output\loop.o: ..\User\exti\exti.h
 ..\output\loop.o: ..\User\MQTTBDTG\MqttKit.h
 ..\output\loop.o: ..\User\TCPDEMO\tcp_demo.h
 ..\output\loop.o: ..\User\socket\socket.h
 ..\output\loop.o: ..\User\BDTG\BD_TG.h
-..\output\loop.o: ..\User\input\input.h

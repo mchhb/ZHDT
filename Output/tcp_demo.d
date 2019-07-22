@@ -3,6 +3,8 @@
 ..\output\tcp_demo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\tcp_demo.o: ..\User\TCPDEMO\tcp_demo.h
 ..\output\tcp_demo.o: ..\User\main\types.h
+..\output\tcp_demo.o: ..\User\w5500\W5500_config.h
+..\output\tcp_demo.o: ..\User\main\config.h
 ..\output\tcp_demo.o: ..\Libraries\CMSIS\stm32f10x.h
 ..\output\tcp_demo.o: ..\Libraries\CMSIS\core_cm3.h
 ..\output\tcp_demo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -32,8 +34,6 @@
 ..\output\tcp_demo.o: ..\Libraries\FWlib\inc\stm32f10x_usart.h
 ..\output\tcp_demo.o: ..\Libraries\FWlib\inc\stm32f10x_wwdg.h
 ..\output\tcp_demo.o: ..\Libraries\FWlib\inc\misc.h
-..\output\tcp_demo.o: ..\User\w5500\W5500_config.h
-..\output\tcp_demo.o: ..\User\main\config.h
 ..\output\tcp_demo.o: ..\User\w5500\w5500.h
 ..\output\tcp_demo.o: ..\User\socket\socket.h
 ..\output\tcp_demo.o: ..\User\BDTG\BD_TG.h
@@ -42,4 +42,3 @@
 ..\output\tcp_demo.o: ..\User\delay\delay.h
 ..\output\tcp_demo.o: ..\User\LOOP\LOOP.h
 ..\output\tcp_demo.o: ..\User\24c16\24c16.h
-..\output\tcp_demo.o: ..\User\input\input.h

@@ -52,3 +52,6 @@ uint8 DHT11_GetValue(uint8 *p)
     return 0;
 }
 
+
+
+

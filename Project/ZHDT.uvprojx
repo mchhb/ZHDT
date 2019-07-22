@@ -175,7 +175,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWlib\inc;..\User\main;..\User\delay;..\User\LOOP;..\User\usart2;..\User\spi;..\User\MQTT;..\User\spi;..\User\Tim2;..\User\socket;..\User\IWDG;..\User\gpio;..\User\w5500;..\User\DHT11;..\User\dhcp;..\User\24c16;..\User\ADXL345;..\User\exti;..\User\BDTG;..\User\MQTTBDTG;..\User\TCPDEMO;..\User\input</IncludePath>
+              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWlib\inc;..\User\main;..\User\delay;..\User\LOOP;..\User\usart2;..\User\spi;..\User\MQTT;..\User\spi;..\User\Tim2;..\User\socket;..\User\IWDG;..\User\gpio;..\User\w5500;..\User\DHT11;..\User\dhcp;..\User\usart3;..\User\usart1;..\User\24c16;..\User\ADXL345;..\User\adc;..\User\exti;..\User\BDTG;..\User\MQTTBDTG;..\User\TCPDEMO</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -459,6 +459,16 @@
               <FilePath>..\User\gpio\gpio.c</FilePath>
             </File>
             <File>
+              <FileName>usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\usart3\usart3.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\usart1\usart1.c</FilePath>
+            </File>
+            <File>
               <FileName>24c16.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\24c16\24c16.c</FilePath>
@@ -469,14 +479,14 @@
               <FilePath>..\User\ADXL345\ADXL345.c</FilePath>
             </File>
             <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\adc\adc.c</FilePath>
+            </File>
+            <File>
               <FileName>exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\exti\exti.c</FilePath>
-            </File>
-            <File>
-              <FileName>input.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\input\input.c</FilePath>
             </File>
           </Files>
         </Group>

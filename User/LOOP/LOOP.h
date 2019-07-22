@@ -26,7 +26,9 @@
 #define PARA_IDX_TIMES_STANDBY		16
 extern uint8_t external_temp1,external_temp3;
 extern uint8_t external_humi1,external_humi3;
-extern uint8_t external_vibr1,external_vibr3;
+extern uint8_t external_vibx1,external_vibx3;
+extern uint8_t external_viby1,external_viby3;
+extern uint8_t external_vibz1,external_vibz3;
 extern uint8_t external_noise1,external_noise3;
 extern uint8_t  network_status;
 extern float temperature,humidity;

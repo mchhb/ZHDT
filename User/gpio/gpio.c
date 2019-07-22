@@ -87,29 +87,5 @@ void GPIO_Configuration(void)
  	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;  
  	GPIO_Init(GPIOC, &GPIO_InitStructure);//sp32322
 	GPIO_SetBits(GPIOC,GPIO_Pin_12);//
-	
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_15;        
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz; 
- 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;  
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);//sp32322 
- 	GPIO_SetBits(GPIOA,GPIO_Pin_15);//
-	
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_10;        
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz; 
- 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;  
- 	GPIO_Init(GPIOC, &GPIO_InitStructure);//sp32322
-	GPIO_SetBits(GPIOC,GPIO_Pin_10);//
-	
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_11;        
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz; 
- 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;  
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);//sp32322 
- 	GPIO_SetBits(GPIOA,GPIO_Pin_11);//
-	
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_12;        
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz; 
- 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;  
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);//sp32322 
- 	GPIO_SetBits(GPIOA,GPIO_Pin_12);//
 }
 

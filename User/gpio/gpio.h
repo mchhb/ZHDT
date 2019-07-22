@@ -30,17 +30,6 @@
 #define UART3_LED_SUCCESS_OFF GPIO_SetBits(GPIOC, GPIO_Pin_11);
 #define UART3_LED_FAIL_ON  		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
 #define UART3_LED_FAIL_OFF 		GPIO_SetBits(GPIOC, GPIO_Pin_12);
-
-#define DOOR_OPEN_ON  				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-#define DOOR_OPEN_OFF 				GPIO_SetBits(GPIOC, GPIO_Pin_10);
-#define DOOR_CLOSE_ON  				GPIO_ResetBits(GPIOA, GPIO_Pin_15);
-#define DOOR_CLOSE_OFF 				GPIO_SetBits(GPIOA, GPIO_Pin_15);
-
-
-#define TOP_YES			  				GPIO_ResetBits(GPIOA, GPIO_Pin_11);
-#define TOP_NO 								GPIO_SetBits(GPIOA, GPIO_Pin_11);
-#define BUTTON_YES  					GPIO_ResetBits(GPIOA, GPIO_Pin_12);
-#define BUTTON_NO 						GPIO_SetBits(GPIOA, GPIO_Pin_12);
 void GPIO_Configuration(void);
 
 

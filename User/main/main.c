@@ -11,6 +11,10 @@
 */
 #include "LOOP.h"
 #include "delay.h"
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <time.h> 
+
 int main(void)
 {
 	Systick_Init(72); //配置系统时钟为72M   
@@ -24,7 +28,6 @@ int main(void)
 		
 	}
 }
-
 
 
 

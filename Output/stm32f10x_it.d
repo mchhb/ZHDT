@@ -42,4 +42,3 @@
 ..\output\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\stm32f10x_it.o: ..\User\IWDG\iwdg.h
 ..\output\stm32f10x_it.o: ..\User\main\main.h
-..\output\stm32f10x_it.o: ..\User\input\input.h

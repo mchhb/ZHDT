@@ -41,7 +41,7 @@ static void ADC1_GPIO_Config(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 | RCC_APB2Periph_GPIOB, ENABLE);
 	
 	/* Configure PA.01  as analog input */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);		
 }
@@ -91,7 +91,7 @@ static void ADC1_Mode_Config(void)
 	/*配置ADC时钟，为PCLK2的8分频，即9MHz*/
 	RCC_ADCCLKConfig(RCC_PCLK2_Div8); 
 	/*配置ADC1的通道11为55.	5个采样周期，序列为1 */ 
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_9, 1, ADC_SampleTime_28Cycles5);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_8, 1, ADC_SampleTime_28Cycles5);
 //	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 2, ADC_SampleTime_28Cycles5);
 //	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 3, ADC_SampleTime_28Cycles5);
 //#define ADC_SampleTime_1Cycles5                    ((uint8_t)0x00)

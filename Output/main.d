@@ -30,3 +30,6 @@
 ..\output\main.o: ..\Libraries\FWlib\inc\stm32f10x_wwdg.h
 ..\output\main.o: ..\Libraries\FWlib\inc\misc.h
 ..\output\main.o: ..\User\delay\delay.h
+..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h

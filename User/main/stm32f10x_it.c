@@ -30,7 +30,6 @@
 #include <stdint.h>
 #include <string.h>
 #include "iwdg.h"
-#include "input.h"
 extern uint8_t read_dht11;
 extern uint8_t send_data;
 extern uint32_t timePUB;
@@ -149,42 +148,6 @@ void TIM2_IRQHandler(void)
 		
 	}		 	
 }
-void TIM4_IRQHandler(void)
-{
-	if ( TIM_GetITStatus(TIM4 , TIM_IT_Update) != RESET ) 
-	{	
-		TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);    
-//		for(i = 0; i < T4_MS_ARRAY_NUM; i++)
-//		{
-//			t4_count_ms[i]++;
-//		}
-		if(input1_time == 1)
-		{
-			t4_count_ms[1]++;
-		}
-		if(input2_time == 1)
-		{
-			t4_count_ms[2]++;
-		}
-		if(input3_time == 1)
-		{
-			t4_count_ms[3]++;
-		}
-		if(input4_time == 1)
-		{
-			t4_count_ms[4]++;
-		}
-		if(input5_time == 1)
-		{
-			t4_count_ms[5]++;
-		}
-		if(input6_time == 1)
-		{
-			t4_count_ms[6]++;
-		}
-		
-	}		 	
-}
 void TIM3_IRQHandler(void)
 {
 	 if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
@@ -213,16 +176,7 @@ void EXTI1_IRQHandler(void)
 		power_status = ac; 
 	}
 }
-uint8_t door = 0;
-void EXTI15_10_IRQHandler(void)
-{
-  if(EXTI_GetITStatus(EXTI_Line10) != RESET) //确保是否产生了EXTI Line中断
-  {
-    EXTI_ClearITPendingBit(EXTI_Line10);     //清除中断标志位
-		door = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_10);
-		printf("door = %d\r\n",door); 
-	}
-}
+
 void EXTI0_IRQHandler(void)
 { 		    		    				     		    
   if(EXTI_GetITStatus(EXTI_Line0) != RESET) //确保是否产生了EXTI Line中断
